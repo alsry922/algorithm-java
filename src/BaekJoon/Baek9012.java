@@ -1,16 +1,13 @@
 package BaekJoon;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Stack;
-
+import java.io.*;
+import java.util.*;
+// 9012 스택
 public class Baek9012 {
   static int T;    // 입력 횟수
   static String[] str;    // 괄호 문자열 배열
   static Stack<Character> stack = new Stack<>();
   static StringBuilder answer = new StringBuilder();
-
   /*
    * 괄호문자열 유효성 체크 결과에 따라 NO, 혹은 YES를 answer에 저장하는 함수
    * @parameter boolean isCheck: 괄호 유효성
@@ -22,7 +19,6 @@ public class Baek9012 {
       answer.append("NO").append("\n");
     }
   }
-
   /*
    * 괄호 문자열을 순회하며 올바른 괄호 문자열인지 확인하는 함수
    * @parameter String parentheses: 괄호 문자열
@@ -45,7 +41,6 @@ public class Baek9012 {
      * 스택이 비어있지 않다면 유효하지 않은 문자열*/
     return stack.isEmpty();
   }
-
   public static void main(String[] args) throws IOException {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
