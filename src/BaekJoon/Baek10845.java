@@ -3,15 +3,15 @@ package BaekJoon;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Stack;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-public class Baek10828 {
+public class Baek10845 {
   public static void main(String[] args) throws IOException {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     StringBuilder answer = new StringBuilder();
     StringTokenizer st;
-    Stack<Integer> stack = new Stack<>();
+    ArrayList<Integer> list = new ArrayList<>();    // 수를 담을 리스트
     int N = Integer.parseInt(br.readLine());    // 입력 횟수
 
     for (int i = 0; i < N; i++) {
@@ -20,32 +20,40 @@ public class Baek10828 {
       while (st.hasMoreTokens()) {
         String command = st.nextToken();
         if (command.startsWith("push")) {
-          stack.push(Integer.parseInt(st.nextToken()));
+          list.add(Integer.parseInt(st.nextToken()));
         }
         else if (command.startsWith("pop")) {
-          if (stack.empty()) {
+          if (list.isEmpty()) {
             answer.append(-1).append("\n");
           }
           else {
-            answer.append(stack.pop()).append("\n");
+            answer.append(list.remove(0)).append("\n");
           }
         }
         else if (command.startsWith("size")) {
-          answer.append(stack.size()).append("\n");
+          answer.append(list.size()).append("\n");
         }
         else if(command.startsWith("empty")) {
-          if (stack.empty()) {
+          if (list.isEmpty()) {
             answer.append(1).append("\n");
           }
           else {
             answer.append(0).append("\n");
           }
         }
-        else if (command.startsWith("top")) {
-          if (stack.empty()) {
+        else if (command.startsWith("front")) {
+          if (list.isEmpty()) {
             answer.append(-1).append("\n");
           } else {
-            answer.append(stack.peek()).append("\n");
+            answer.append(list.get(0)).append("\n");
+          }
+        }
+        else if (command.startsWith("back")) {
+          if (list.isEmpty()) {
+            answer.append(-1).append("\n");
+          }
+          else {
+            answer.append(list.get(list.size()-1)).append("\n");
           }
         }
       }
