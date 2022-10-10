@@ -3,11 +3,11 @@ package BFS.가중치가_동일한_그래프에서의_BFS;
 import java.util.*;
 import java.io.*;
 
-class Vertex {
+class Vertex1 {
   int x;
   int y;
 
-  public Vertex(int x, int y) {
+  public Vertex1(int x, int y) {
     this.x = x;
     this.y = y;
   }
@@ -19,7 +19,7 @@ public class Exercise1 {
   static int[][] grid = new int[MAX_N][MAX_M];    // 격자
   static boolean[][] visited = new boolean[MAX_N][MAX_M];    // 방문 정점
   static int[][] step = new int[MAX_N][MAX_M];    // 특정 시작 정점으로부터 각 정점까지의 최단거리
-  static Queue<Vertex> queue = new LinkedList<>();    // bfs에 사용할 큐
+  static Queue<Vertex1> queue = new LinkedList<>();    // bfs에 사용할 큐
 
   public static boolean isInRange(int x, int y) {
     return 0 <= x && x < n && 0 <= y && y < m;
@@ -32,14 +32,14 @@ public class Exercise1 {
     int[] dx = new int[]{-1, 1, 0, 0};
     int[] dy = new int[]{0, 0, -1, 1};
     while(!queue.isEmpty()) {
-      Vertex currVtx = queue.poll();
+      Vertex1 currVtx = queue.poll();
       for (int i = 0; i < 4; i++) {
         int nextX = currVtx.x + dx[i];
         int nextY = currVtx.y + dy[i];
         if (canGo(nextX, nextY)) {
           visited[nextX][nextY] = true;
           step[nextX][nextY] = step[currVtx.x][currVtx.y]+1;
-          queue.add(new Vertex(nextX,nextY));
+          queue.add(new Vertex1(nextX,nextY));
         }
       }
     }
@@ -60,7 +60,7 @@ public class Exercise1 {
     /*(0,0)정점에서부터 bfs 시작*/
     visited[0][0] = true;
     step[0][0] = 0;
-    queue.add(new Vertex(0, 0));
+    queue.add(new Vertex1(0, 0));
     bfs();
     System.out.println(step[n-1][m-1] > 0 ? step[n-1][m-1] : -1);
   }
