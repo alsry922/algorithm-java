@@ -4,45 +4,47 @@ import java.io.*;
 import java.util.*;
 
 public class Exercise1 {
+  static int MAX_VALUE = 10000;    // 나올 수 있는 수의 최대 숫자
   static int n;
   static int[] seq;
-  static int[] dp;
-
+  static int[][] dp;
   public static void dpInit() {
-    for (int i = 1; i < n+1; i++) {
-      dp[i] = Integer.MIN_VALUE;
+    for (int i = 0; i <= n; i++) {
+      for (int j = 0; j <= MAX_VALUE; j++) {
+        dp[i][j] = Integer.MIN_VALUE;
+      }
     }
-    /*seq[0]=0 은 0번째 수는 말이 안 되지만 j번째 원소가 끝이자 마지막인 1개로 이루어진 수열인 경우를 맞춰줘야 하기 때문이다.
-    * 밑에 이중 반복문에서 j를 살펴보면 알 수 있음.
-    * dp[0]=0 은 애초에 0번째 수가 없으니 0번째 수를 마지막으로 하는 최장 부분 증가 수열의 길이는 0이다.*/
-    dp[0] = 0;
-    seq[0] = 0;
+    dp[0][0] = 0;
   }
-
   public static void main(String[] args) throws IOException {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     n = Integer.parseInt(br.readLine());
     seq = new int[n+1];
-    dp = new int[n+1];
+    dp = new int[n+1][MAX_VALUE+1];
     StringTokenizer st = new StringTokenizer(br.readLine());
-    for (int i = 1; i < n+1; i++) {
+    for (int i = 1; i <= n; i++) {
       seq[i] = Integer.parseInt(st.nextToken());
     }
-    /*dp[i] = i번째 수가 마지막일 때 최장 증가 부분 수열의 길이
-    * 선택한 부분 수열에서 마지막 원소의 위치가 같다면, 이 부분 수열의 길이가 길수록 더 좋다.
-    * i번째 수가 j번째 수보다 크면 j번째 수를 끝으로 하는 증가 부분 수열보다
-    * +1 만큼 긴 i번째 수를 끝으로 하는 부분 증가 수열을 만들 수 있음*/
     dpInit();
-    for (int i = 1; i < n+1; i++) {
-      for (int j = 0; j < i; j++) {
-        if (seq[i] > seq[j]) {
-          dp[i] = Math.max(dp[i], dp[j]+1);
+    for (int i = 1; i <= n; i++) {
+      for (int j = 0; j <= MAX_VALUE; j++) {
+        if (j != seq[i]) {
+          dp[i][j] = dp[i-1][j];
+        }
+        else {
+          dp[i][j] = dp[i-1][j];
+
+          for (int k = 0; k < seq[i]; k++) {
+            if (dp[i-1][k] != Integer.MIN_VALUE) {
+              dp[i][j] = Math.max(dp[i-1][k]+1, dp[i][j]);
+            }
+          }
         }
       }
     }
     int answer = 0;
-    for (int i = 1; i < n+1; i++) {
-      answer = Math.max(answer, dp[i]);
+    for (int j = 0; j <= MAX_VALUE; j++) {
+      answer = Math.max(answer, dp[n][j]);
     }
     System.out.println(answer);
   }
