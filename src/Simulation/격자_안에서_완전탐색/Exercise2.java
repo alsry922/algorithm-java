@@ -1,4 +1,4 @@
-package Simulation;
+package Simulation.격자_안에서_완전탐색;
 
 import java.io.BufferedReader;
 import java.io.IOException;
