@@ -1,5 +1,5 @@
 package BaekJoon;
-
+// 1012 유기농 배추
 import java.io.*;
 import java.util.*;
 class Vertex {
@@ -76,19 +76,21 @@ public class Baek1012 {
     }
     System.out.println(answer);
   }
-  /*
+  /**
   * x, y 로 갈 수 있는지 여부를 판단하는 함수
-  * @param int x: 배추 밭의 x 좌표(행)
-  * @param int y: 배추 밭의 y 좌표(열)
-  * @return boolean: 갈 수 있는 경우 true 아닌 경우 false*/
+  * @param x: 배추 밭의 x 좌표(행)
+  * @param y: 배추 밭의 y 좌표(열)
+  * @return boolean: 갈 수 있는 경우 true 아닌 경우 false
+   * */
   public static boolean canGo(int x, int y) {
     return isInRange(x, y) && grid[x][y] == 1 && !visited[x][y];
   }
-  /*
+  /**
   * x, y가 배추 밭의 범위 안에 있는지 여부를 판단하는 함수
-  * @param int x: 배추 밭의 x 좌표(행)
-  * @param int y: 배추 밭의 y 좌표(열)
-  * @return boolean: 범위 안에 있는 경우 true 아닌 경우 false*/
+  * @param x: 배추 밭의 x 좌표(행)
+  * @param y: 배추 밭의 y 좌표(열)
+  * @return boolean: 범위 안에 있는 경우 true 아닌 경우 false
+   * */
   public static boolean isInRange(int x, int y) {
     return 0 <= x && x < m && 0 <= y && y < n;
   }
