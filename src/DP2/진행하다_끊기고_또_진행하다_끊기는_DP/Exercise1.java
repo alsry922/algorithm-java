@@ -1,42 +1,40 @@
 package DP2.진행하다_끊기고_또_진행하다_끊기는_DP;
-
+//연속 부분 합의 최댓값 구하기
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Exercise1 {
-  static int n;
-  static int[] seq;
-  static int[] dp; // i번째 원소를 마지막으로 하는 연속 부분수열일 때 원소들의 최대 합
-  public static void initialize() {
-    for (int i = 0; i <= n; i++) {
-      dp[i] = Integer.MIN_VALUE;
-    }
-    dp[1] = seq[1];
-  }
-  public static void main(String[] args) throws IOException {
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    n = Integer.parseInt(br.readLine());
-    seq = new int[n+1];
-    dp = new int[n+1];
+    public static int N; //수열 길이
+    public static int[] seq;
+    public static int[] dp;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        N = Integer.parseInt(br.readLine());
 
-    StringTokenizer st = new StringTokenizer(br.readLine());
-    for (int i = 1; i <= n; i++) {
-      seq[i] = Integer.parseInt(st.nextToken());
-    }
+        seq = new int[N + 1];
+        dp = new int[N + 1];
 
-    initialize();
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        for (int i = 1; i <= N; i++) {
+            seq[i] = Integer.parseInt(st.nextToken());
+        }
 
-    for (int i = 2; i <= n; i++) {
-      dp[i] = Math.max(dp[i-1]+seq[i], seq[i]);
+        dpInit();
+
+        for (int i = 2; i <= N; i++) {
+            dp[i] = Math.max(dp[i - 1] + seq[i], seq[i]);
+        }
+
+        System.out.println(Arrays.stream(dp).max().getAsInt());
     }
 
-    int max = Integer.MIN_VALUE;
-    for (int i = 1; i <= n; i++) {
-      max = Math.max(max, dp[i]);
+    private static void dpInit() {
+        for (int i = 0; i <= N; i++) {
+            dp[i] = Integer.MIN_VALUE;
+        }
+        dp[1] = seq[1];
     }
-
-    System.out.println(max);
-  }
 }
