@@ -1,5 +1,5 @@
 package BaekJoon;
-
+// 가장 긴 증가하는 부분 수열
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
