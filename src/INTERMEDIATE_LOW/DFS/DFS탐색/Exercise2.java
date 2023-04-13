@@ -1,4 +1,4 @@
-package INTERMEDIATE_LOW.DFS.그래프탐색;
+package INTERMEDIATE_LOW.DFS.DFS탐색;
 
 import java.io.BufferedReader;
 import java.io.IOException;
