@@ -7,65 +7,62 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-class Pair {
-    int x, y;
-
-    Pair(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-}
-
+//네 방향 탈출 가능 여부 판별하기
 public class Exercise1 {
-    public static int N, M; //행, 열
-    public static int[][] grid;
-    public static boolean[][] visited;
-    public static int[] dx = {-1, 1, 0, 0};
-    public static int[] dy = {0, 0, -1, 1};
-    public static Queue<Pair> queue = new LinkedList<>();
+    static class Pair {
+        int x, y;
 
+        public Pair(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+    public static int N, M; //행 열
+    public static int[][] grid; //격자
+    public static boolean[][] visited;
+    public static Queue<Pair> bfsQ = new LinkedList<>();
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-
-        grid = new int[N + 1][M + 1];
-        visited = new boolean[N + 1][M + 1];
-
-        for (int i = 1; i <= N; i++) {
+        grid = new int[N][M];
+        visited = new boolean[N][M];
+        for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
-            for (int j = 1; j <= M; j++) {
+            for (int j = 0; j < M; j++) {
                 grid[i][j] = Integer.parseInt(st.nextToken());
             }
         }
 
-        visited[1][1] = true;
-        queue.add(new Pair(1, 1));
-        bfs(1, 1);
-        System.out.println(visited[N][M] ? 1 : 0);
-    }
+        visited[0][0] = true;
+        bfsQ.add(new Pair(0, 0));
 
-    private static void bfs(int x, int y) {
-        while (!queue.isEmpty()) {
-            Pair currV = queue.poll();
+        while (!bfsQ.isEmpty()) {
+            Pair currV = bfsQ.poll();
+            int x = currV.x;
+            int y = currV.y;
+
+            int[] dx = {-1, 1, 0, 0};
+            int[] dy = {0, 0, -1, 1};
+
             for (int i = 0; i < 4; i++) {
-                int nextX = currV.x + dx[i];
-                int nextY = currV.y + dy[i];
-                if (canGo(nextX, nextY)) {
-                    visited[nextX][nextY] = true;
-                    queue.add(new Pair(nextX, nextY));
+                int nx = x + dx[i];
+                int ny = y + dy[i];
+                if (canGo(nx, ny)) {
+                    visited[nx][ny] = true;
+                    bfsQ.add(new Pair(nx, ny));
                 }
             }
         }
-
+        System.out.println(visited[N - 1][M - 1] ? 1 : 0);
     }
 
     private static boolean canGo(int x, int y) {
-        return isInRange(x, y) && grid[x][y] != 0 && !visited[x][y];
+        return isInRange(x, y) && !visited[x][y] && grid[x][y] == 1;
     }
 
     private static boolean isInRange(int x, int y) {
-        return x >= 1 && x <= N && y >= 1 && y <= M;
+        return x >= 0 && x < N && y >= 0 && y < M;
     }
 }
