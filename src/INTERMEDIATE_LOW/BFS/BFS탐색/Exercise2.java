@@ -1,5 +1,4 @@
 package INTERMEDIATE_LOW.BFS.BFS탐색;
-// 갈 수 있는 곳들
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,88 +8,78 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-class Vertex {
-    int x, y;
-
-    public Vertex(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-}
-
+// 갈 수 있는 곳들
 public class Exercise2 {
-    public static int n, k; //grid size, start vertex count
+    static class Vertex {
+        int x, y;
+
+        public Vertex(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+    public static int N, K; //격자 크기
     public static int[][] grid;
     public static boolean[][] visited;
-    public static ArrayList<Vertex> startVertex = new ArrayList<>();
-    public static Queue<Vertex> queue = new LinkedList<>();
-    public static int answer = 0;
-
+    public static int answer;
+    public static Queue<Vertex> bfsQ = new LinkedList<>();
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        K = Integer.parseInt(st.nextToken());
+        grid = new int[N][N];
+        visited = new boolean[N][N];
 
-        n = Integer.parseInt(st.nextToken());
-        k = Integer.parseInt(st.nextToken());
-        grid = new int[n + 1][n + 1];
-        visited = new boolean[n + 1][n + 1];
-
-
-
-        for (int i = 1; i <= n; i++) {
+        for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
-            for (int j = 1; j <= n; j++) {
+            for (int j = 0; j < N; j++) {
                 grid[i][j] = Integer.parseInt(st.nextToken());
             }
         }
 
-        for (int i = 0; i < k; i++) {
+        for (int i = 0; i < K; i++) {
             st = new StringTokenizer(br.readLine());
-            int start = Integer.parseInt(st.nextToken());
-            int end = Integer.parseInt(st.nextToken());
-            startVertex.add(new Vertex(start, end));
+            int x = Integer.parseInt(st.nextToken());
+            int y = Integer.parseInt(st.nextToken());
+            visited[x-1][y-1] = true;
+            bfsQ.add(new Vertex(x-1, y-1));
+            answer++;
         }
 
-        for (int i = 0; i < k; i++) {
-            bfs(startVertex.get(i));
-        }
-
-        System.out.println(answer);
-
-    }
-
-    public static void bfs(Vertex startV) {
-        if (visited[startV.x][startV.y]) {
-            return;
-        }
-
-        int[] dx = {-1, 1, 0, 0};
-        int[] dy = {0, 0, -1, 1};
-
-        visited[startV.x][startV.y] = true;
-        answer++;
-        queue.add(startV);
-
-        while (!queue.isEmpty()) {
-            Vertex currV = queue.poll();
+        while (!bfsQ.isEmpty()) {
+            Vertex currV = bfsQ.poll();
+            int x = currV.x;
+            int y = currV.y;
+            int[] dx = {-1, 1, 0, 0};
+            int[] dy = {0, 0, -1, 1};
             for (int i = 0; i < 4; i++) {
-                int nextX = currV.x + dx[i];
-                int nextY = currV.y + dy[i];
-                if (canGO(nextX, nextY)) {
-                    visited[nextX][nextY] = true;
+                int nx = x + dx[i];
+                int ny = y + dy[i];
+                if (canGo(nx, ny)) {
+                    visited[nx][ny] = true;
                     answer++;
-                    queue.add(new Vertex(nextX, nextY));
+                    bfsQ.add(new Vertex(nx, ny));
                 }
             }
         }
+        System.out.println(answer);
     }
 
-    private static boolean canGO(int x, int y) {
-        return isInRange(x, y) && !visited[x][y] && grid[x][y] == 0;
+    private static boolean canGo(int x, int y) {
+        if (!isInRange(x, y)) {
+            return false;
+        }
+
+        if (visited[x][y] || grid[x][y] == 1) {
+            return false;
+        }
+
+        return true;
     }
 
     private static boolean isInRange(int x, int y) {
-        return x >= 1 && x <= n && y >= 1 && y <= n;
+        return x >= 0 && x < N && y >= 0 && y < N;
     }
 }
 
