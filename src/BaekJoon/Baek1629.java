@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 //곱셈
-public class Exercise1629 {
+public class Baek1629 {
     public static long A,B,C; //밑, 지수, 나누는 수
     public static Map<Long, Long> remains = new HashMap<>();
     public static void main(String[] args) throws IOException {
