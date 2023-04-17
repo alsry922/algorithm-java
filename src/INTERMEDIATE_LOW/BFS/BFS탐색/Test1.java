@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 //우리는 하나
-public class Exercise6 {
+public class Test1 {
     static class Pair {
         int x, y;
 
