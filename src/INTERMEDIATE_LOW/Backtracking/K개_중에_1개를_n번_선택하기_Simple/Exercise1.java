@@ -6,39 +6,39 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+//K개 중에 1개를 n번 뽑기
 public class Exercise1 {
-  public static int K; //뽑을 수의 범위
-  public static int N; //완성되는 수의 자릿수
-  public static ArrayList<Integer> answer = new ArrayList<>();
+    public static int K, N; //K이하의 숫자, 숫자 하나를 N번 반복 선택
+    public static ArrayList<Integer> selected = new ArrayList<>();
+    public static StringBuilder sb = new StringBuilder();
 
-  public static void main(String[] args) throws IOException {
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    StringTokenizer st = new StringTokenizer(br.readLine());
-    K = Integer.parseInt(st.nextToken());
-    N = Integer.parseInt(st.nextToken());
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        K = Integer.parseInt(st.nextToken());
+        N = Integer.parseInt(st.nextToken());
 
-    choose(1);
-
-  }
-
-  public static void choose(int currPos) {
-    if (currPos == N+1) {
-      printAnswer();
-      return;
+        choose(1);
+        System.out.println(sb);
     }
 
-    for (int i = 1; i <= K; i++) {
-      answer.add(i);
-      choose(currPos + 1);
-      answer.remove(answer.size() - 1);
-    }
-  }
+    private static void choose(int digit) {
+        if (digit == N + 1) {
+            print();
+            return;
+        }
 
-  public static void printAnswer() {
-    StringBuffer sb = new StringBuffer();
-    for (int i = 0; i < answer.size(); i++) {
-      sb.append(answer.get(i)).append(" ");
+        for (int i = 1; i <= K; i++) {
+            selected.add(i);
+            choose(digit + 1);
+            selected.remove(selected.size() - 1);
+        }
     }
-    System.out.println(sb);
-  }
+
+    private static void print() {
+        for (Integer select : selected) {
+            sb.append(select).append(" ");
+        }
+        sb.append("\n");
+    }
 }
