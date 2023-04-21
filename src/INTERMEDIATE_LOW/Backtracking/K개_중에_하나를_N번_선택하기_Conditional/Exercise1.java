@@ -5,46 +5,42 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-
+//특정 조건에 맞개 k개 중에 1개를 n번 뽑기
 public class Exercise1 {
-    public static int K, N;
-    public static ArrayList<Integer> answer = new ArrayList<>();
-
+    public static int K, N; //뽑을 수, 반복 수
+    public static ArrayList<Integer> selectList = new ArrayList<>();
+    public static StringBuilder sb = new StringBuilder();
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         K = Integer.parseInt(st.nextToken());
         N = Integer.parseInt(st.nextToken());
 
-        answer.add(0); //0번째 자리 0으로 초기화
-        choose(1);
+        choose(0);
+        System.out.println(sb);
     }
 
-    public static void choose(int currPos) {
-        if (currPos == N + 1) {
-            printAnswer();
+    private static void choose(int cnt) {
+        if (cnt == N) {
+            print();
             return;
         }
 
         for (int i = 1; i <= K; i++) {
-            if (!canPickNum(i, currPos)) {
-                continue;
+            if (cnt < 2
+                    || selectList.get(selectList.size()-1) != i
+                    || selectList.get(selectList.size()-2) != i) {
+                selectList.add(i);
+                choose(cnt + 1);
+                selectList.remove(selectList.size() - 1);
             }
-            answer.add(i);
-            choose(currPos+1);
-            answer.remove(answer.size() - 1);
         }
     }
 
-    private static boolean canPickNum(int i, int currPos) {
-        return (currPos < 3) || (answer.get(currPos-1) != i || answer.get(currPos-2) != i);
-    }
-
-    private static void printAnswer() {
-        StringBuffer sb = new StringBuffer();
-        for (int i = 1; i < answer.size(); i++) {
-            sb.append(answer.get(i)).append(" ");
+    private static void print() {
+        for (int i = 0; i < selectList.size(); i++) {
+            sb.append(selectList.get(i)).append(" ");
         }
-        System.out.println(sb);
+        sb.append("\n");
     }
 }
