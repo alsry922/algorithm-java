@@ -5,40 +5,39 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-
+//n개 중에 m개 뽑기
 public class Exercise1 {
-    public static int N, M; //N개의 숫자, M개 뽑기
-    public static ArrayList<Integer> answer = new ArrayList<>();
-    public static StringBuffer sb = new StringBuffer();
-
+    public static int N, M; //N개 중에 M개 뽑기
+    public static int[] nums;
+    public static ArrayList<Integer> list = new ArrayList<>();
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
+        nums = new int[N];
 
-        findCombination(1, 0);
-        System.out.println(sb);
+        for (int i = 0; i < N; i++) {
+            nums[i] = i + 1;
+        }
+        findCombination(0, 0);
     }
 
-    private static void findCombination(int currNum, int cnt) {
-        if (currNum == N + 1) {
+    private static void findCombination(int idx, int cnt) {
+        if (idx == N) {
             if (cnt == M) {
-                printCombination();
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < list.size(); i++) {
+                    sb.append(list.get(i)).append(" ");
+                }
+                System.out.println(sb);
             }
             return;
         }
 
-        answer.add(currNum);
-        findCombination(currNum + 1, cnt + 1);
-        answer.remove(answer.size() - 1);
-        findCombination(currNum + 1, cnt);
-    }
-
-    private static void printCombination() {
-        for (Integer num : answer) {
-            sb.append(num).append(" ");
-        }
-        sb.append("\n");
+        list.add(nums[idx]);
+        findCombination(idx+1, cnt+1);
+        list.remove(list.size() - 1);
+        findCombination(idx + 1, cnt);
     }
 }
