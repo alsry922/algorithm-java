@@ -4,47 +4,38 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
+//크기가 n인 순열
 public class Exercise1 {
-    public static int N;
+    public static int N; //가능한 수 범위
+    public static boolean[] selected;
     public static ArrayList<Integer> permutation = new ArrayList<>();
-    public static boolean[] visited;
-    public static StringBuffer sb = new StringBuffer();
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
-        visited = new boolean[N + 1];
-
-        makePermutaion(1);
-        System.out.println(sb);
+        selected = new boolean[N + 1];
+        findPermutation(1);
     }
 
-    public static void makePermutaion(int digit) {
-        if (digit == N + 1) {
-            printPermutaion();
+    private static void findPermutation(int currDigit) {
+        if (currDigit == N + 1) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < permutation.size(); i++) {
+                sb.append(permutation.get(i)).append(" ");
+            }
+            System.out.println(sb);
             return;
         }
 
         for (int i = 1; i <= N; i++) {
-            if (visited[i]) {
-                continue;
+            if (!selected[i]) {
+                selected[i] = true;
+                permutation.add(i);
+                findPermutation(currDigit + 1);
+                selected[i] = false;
+                permutation.remove(permutation.size() - 1);
             }
-
-            permutation.add(i);
-            visited[i] = true;
-            makePermutaion(digit + 1);
-            permutation.remove(permutation.size() - 1);
-            visited[i] = false;
         }
     }
-
-    private static void printPermutaion() {
-        for (Integer num : permutation) {
-            sb.append(num).append(" ");
-        }
-        sb.append("\n");
-    }
-
-
 }
