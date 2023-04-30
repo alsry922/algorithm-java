@@ -1,41 +1,37 @@
 package INTERMEDIATE_LOW.Simulation.격자_안에서_터지고_덜어지는_경우;
-//십자 모양 폭발
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+//십자 모양 폭발
 public class Exercise2 {
-    public static int N; //격자 크기
+    public static int N;
     public static int[][] grid;
-    public static int[][] temp;
+    public static int[][] nextGrid;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        StringBuffer sb = new StringBuffer();
+        N = Integer.parseInt(br.readLine());
+        grid = new int[N][N];
+        nextGrid = new int[N][N];
 
-        N = Integer.parseInt(st.nextToken());
-        grid = new int[N + 1][N + 1];
-        temp = new int[N + 1][N + 1];
-
-        for (int i = 1; i <= N; i++) {
-            st = new StringTokenizer(br.readLine());
-            for (int j = 1; j <= N; j++) {
+        for (int i = 0; i < N; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            for (int j = 0; j < N; j++) {
                 grid[i][j] = Integer.parseInt(st.nextToken());
             }
         }
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        st = new StringTokenizer(br.readLine());
-        int r = Integer.parseInt(st.nextToken());
-        int c = Integer.parseInt(st.nextToken());
+        int centerX = Integer.parseInt(st.nextToken()) - 1;
+        int centerY = Integer.parseInt(st.nextToken()) - 1;
 
-        crossBoom(r, c);
-
-        grid = temp;
-        for (int i = 1; i <= N; i++) {
-            for (int j = 1; j <= N; j++) {
+        bomb(centerX, centerY);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
                 sb.append(grid[i][j]).append(" ");
             }
             sb.append("\n");
@@ -43,30 +39,35 @@ public class Exercise2 {
         System.out.println(sb);
     }
 
-    public static void crossBoom(int r, int c) {
-        int bombRange = grid[r][c];
+    private static void bomb(int centerX, int centerY) {
+        int bombRange = grid[centerX][centerY];
 
-        for (int x = 1; x <= N; x++) {
-            for (int y = 1; y <= N; y++) {
-                if (isInBombRange(x, y, r, c, bombRange)) {
-                    grid[x][y] = 0;
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                if (inBombRange(i, j, centerX, centerY, bombRange)) {
+                    grid[i][j] = 0;
                 }
             }
         }
 
-        for (int y = 1; y <= N; y++) {
-            int tempRow = N;
-            for (int x = N; x >= 1; x--) {
-                if (grid[x][y] != 0) {
-                    temp[tempRow--][y] = grid[x][y];
+        for (int i = 0; i < N; i++) {
+            int nextRow = N - 1;
+            for (int j = N - 1; j >= 0; j--) {
+                if (grid[j][i] != 0) {
+                    nextGrid[nextRow--][i] = grid[j][i];
                 }
             }
         }
 
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                grid[i][j] = nextGrid[i][j];
+            }
+        }
     }
 
-    private static boolean isInBombRange(int x, int y, int r, int c, int bombRange) {
-        return (x == r || y == c) && (Math.abs(x - r) + Math.abs(y - c) < bombRange);
+    private static boolean inBombRange(int x, int y, int centerX, int centerY, int bombRange) {
+        return (x == centerX || y == centerY) &&
+                (Math.abs(x - centerX) + Math.abs(y - centerY) < bombRange);
     }
-
 }
