@@ -4,41 +4,33 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 //K개 중에 1개를 n번 뽑기
 public class Exercise1 {
-    public static int K, N; //K이하의 숫자, 숫자 하나를 N번 반복 선택
-    public static ArrayList<Integer> selected = new ArrayList<>();
-    public static StringBuilder sb = new StringBuilder();
-
+    public static int k, n;
+    public static List<Integer> combination = new ArrayList<>();
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        K = Integer.parseInt(st.nextToken());
-        N = Integer.parseInt(st.nextToken());
+        String[] input = br.readLine().split(" ");
+        k = Integer.parseInt(input[0]);
+        n = Integer.parseInt(input[1]);
 
-        choose(1);
-        System.out.println(sb);
+        choose(n);
     }
 
-    private static void choose(int digit) {
-        if (digit == N + 1) {
-            print();
+    public static void choose(int n) {
+        if (n == 0) {
+            StringBuilder sb = new StringBuilder();
+            combination.forEach(ele -> sb.append(ele).append(" "));
+            System.out.println(sb);
             return;
         }
-
-        for (int i = 1; i <= K; i++) {
-            selected.add(i);
-            choose(digit + 1);
-            selected.remove(selected.size() - 1);
+        for (int i = 1; i <= k; i++) {
+            combination.add(i);
+            choose(n - 1);
+            combination.remove(combination.size() - 1);
         }
-    }
-
-    private static void print() {
-        for (Integer select : selected) {
-            sb.append(select).append(" ");
-        }
-        sb.append("\n");
     }
 }
