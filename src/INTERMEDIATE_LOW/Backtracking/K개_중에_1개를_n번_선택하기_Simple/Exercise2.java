@@ -1,44 +1,58 @@
 package INTERMEDIATE_LOW.Backtracking.K개_중에_1개를_n번_선택하기_Simple;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 //아름다운 수
 public class Exercise2 {
-    public static int N; //자릿 수
-    public static ArrayList<Integer> selectList = new ArrayList<>();
+    public static int N;
+    public static List<Integer> list = new ArrayList<>();
     public static int answer = 0;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        N = Integer.parseInt(br.readLine());
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        choose(0);
-        System.out.println(answer);
+        N = Integer.parseInt(br.readLine());
+        choose(N);
+
+        bw.write(answer);
+        bw.flush();
+        br.close();
+        bw.close();
     }
 
-    private static void choose(int cnt) {
-        if (cnt == N) {
-            if (isBeautifulNum()) {
+    public static void choose(int n) {
+        if (n == 0) {
+            if (isBeautifulNum(list)) {
                 answer++;
             }
             return;
         }
 
         for (int i = 1; i <= 4; i++) {
-            selectList.add(i);
-            choose(cnt + 1);
-            selectList.remove(selectList.size() - 1);
+            list.add(i);
+            choose(n-1);
+            list.remove(list.size()-1);
         }
     }
 
-    private static boolean isBeautifulNum() {
-        for (int i = 0; i < selectList.size(); i += selectList.get(i)) {
-            if (i + selectList.get(i) - 1 >= N) {
+    public static boolean isBeautifulNum(List<Integer> list) {
+        for (int i = 0; i < list.size(); i += list.get(i)) {
+            int num = list.get(i);
+
+            if (i + num - 1 >= N) {
                 return false;
             }
-            for (int j = i; j < i + selectList.get(i); j++) {
-                if (!selectList.get(i).equals(selectList.get(j))) {
+
+            boolean isBeautifulNum = false;
+            for (int j = i; j < i + num; j++) {
+                if (!Objects.equals(list.get(j), list.get(i))) {
                     return false;
                 }
             }
