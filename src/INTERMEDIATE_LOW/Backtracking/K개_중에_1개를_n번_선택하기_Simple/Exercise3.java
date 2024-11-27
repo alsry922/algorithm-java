@@ -14,9 +14,9 @@ public class Exercise3 {
     public static int N; //격자 크기
     public static int[][] grid;
     public static int[][] bombed;
-    public static List<Integer> xs = new ArrayList<>();
-    public static List<Integer> ys = new ArrayList<>();
+    public static List<Pair> bombPos = new ArrayList<>();
     public static List<Integer> pickBomb = new ArrayList<>();
+    public static int maxArea = 0;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -30,20 +30,22 @@ public class Exercise3 {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 if (grid[i][j] == 1) {
-                    xs.add(i);
-                    ys.add(j);
+                    bombPos.add(new Pair(i, j));
                 }
             }
         }
 
         choose(0);
+        System.out.println(maxArea);
+        br.close();
+        bw.close();
     }
 
     public static void choose(int n) {
-        if (n == xs.size()) {
-            // 영향 받은 갯수 세기
+        if (n == bombPos.size()) {
+            int area = getArea();
+            maxArea = Math.max(area, maxArea);
             initBombed();
-            bomb();
             return;
         }
 
@@ -62,35 +64,54 @@ public class Exercise3 {
         }
     }
 
-    public static void bomb() {
-        for (int i = 0; i < xs.size(); i++) {
+    public static int getArea() {
+        for (int i = 0; i < bombPos.size(); i++) {
             int bombType = pickBomb.get(i);
-            int x = xs.get(i);
-            int y = ys.get(i);
-            bombRange(bombType, x, y);
+            Pair pos = bombPos.get(i);
+            simulate(bombType, pos.x, pos.y);
         }
+
+        int area = 0;
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                if (bombed[i][j] == 1) {
+                    area += 1;
+                }
+            }
+        }
+
+        return area;
     }
 
-    public static void bombRange(int bombType, int x, int y) {
-        bombed[x][y] = 1;
+    public static void simulate(int bombType, int x, int y) {
         if (bombType == 1) {
-            int[] dx = {-1, 1};
-            int[] dy = {0, 0};
-            for (int i = 0; i < dx.length; i++) {
-                for (int j = 0; j < 2; j++) {
-                    int nx = x + dx[i];
-                    int ny = y + dy[i];
-                    if (isInRange(nx, ny)) {
-                        bombed[nx][ny] = 1;
-                    }
+            Pair[] area = {
+                    new Pair(-2, 0), new Pair(-1, 0), new Pair(0, 0), new Pair(1, 0), new Pair(2, 0)};
+            for (int i = 0; i < area.length; i++) {
+                int nx = x + area[i].x;
+                int ny = y + area[i].y;
+                if (isInRange(nx, ny)) {
+                    bombed[nx][ny] = 1;
                 }
             }
         } else if (bombType == 2) {
-            int[] dx = {-1, 0, 1, 0};
-            int[] dy = {0, 1, 0, -1};
-            for (int i = 0; i < dx.length; i++) {
-                int nx = x + dx[i];
-                int ny = y + dy[i];
+            Pair[] area = {
+                    new Pair(-1, 0), new Pair(0, 1), new Pair(0, 0), new Pair(1, 0), new Pair(0, -1)
+            };
+            for (int i = 0; i < area.length; i++) {
+                int nx = x + area[i].x;
+                int ny = y + area[i].y;
+                if (isInRange(nx, ny)) {
+                    bombed[nx][ny] = 1;
+                }
+            }
+        } else {
+            Pair[] area = {
+                    new Pair(-1, -1), new Pair(-1, 1), new Pair(0, 0), new Pair(1, 1), new Pair(1, -1)
+            };
+            for (int i = 0; i < area.length; i++) {
+                int nx = x + area[i].x;
+                int ny = y + area[i].y;
                 if (isInRange(nx, ny)) {
                     bombed[nx][ny] = 1;
                 }
