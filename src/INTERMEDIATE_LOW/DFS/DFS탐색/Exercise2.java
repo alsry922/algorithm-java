@@ -1,8 +1,11 @@
 package INTERMEDIATE_LOW.DFS.DFS탐색;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 //두 방향 탈출 가능 여부 판별하기
@@ -15,50 +18,54 @@ public class Exercise2 {
             this.y = y;
         }
     }
-    public static int N, M; //행, 열
+
+    public static int N, M; //격자 행, 열
     public static int[][] grid;
     public static boolean[][] visited;
-    public static int[][] order;
+
+    public static final int DIR_NUM = 2;
+    public static int[] dx = {0, 1};
+    public static int[] dy = {1, 0};
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        grid = new int[N + 1][M + 1];
-        visited = new boolean[N + 1][M + 1];
-        order = new int[N + 1][M + 1];
-        for (int i = 1; i <= N; i++) {
-            st = new StringTokenizer(br.readLine());
-            for (int j = 1; j <= M; j++) {
-                grid[i][j] = Integer.parseInt(st.nextToken());
-            }
+        grid = new int[N][M];
+        visited = new boolean[N][M];
+
+        for (int i = 0; i < N; i++) {
+            grid[i] = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
         }
 
-        visited[1][1] = true;
-        dfs(1, 1);
-        System.out.println(visited[N][M] ? 1 : 0);
+        visited[0][0] = true;
+        dfs(new Pair(0, 0));
+
+        bw.append(visited[N-1][M-1] ? "1" : "0").append("\n");
+        bw.flush();
+        bw.close();
+        br.close();
     }
 
-    private static void dfs(int x, int y) {
-        int[] dx = {1, 0};
-        int[] dy = {0, 1};
-
-        for (int i = 0; i < 2; i++) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            if (canGo(nx, ny)) {
+    public static void dfs(Pair curPos) {
+        int cx = curPos.x;
+        int cy = curPos.y;
+        for (int i = 0; i < DIR_NUM; i++) {
+            int nx = cx + dx[i];
+            int ny = cy + dy[i];
+            if (canMove(nx, ny)) {
                 visited[nx][ny] = true;
-                order[nx][ny] = order[x][y] + 1;
-                dfs(nx, ny);
+                dfs(new Pair(nx, ny));
             }
         }
     }
 
-    private static boolean canGo(int x, int y) {
-        return isInRange(x, y) && !visited[x][y] && grid[x][y] == 1;
+    public static boolean canMove(int x, int y) {
+        return inRange(x, y) && grid[x][y] != 0 && !visited[x][y];
     }
 
-    private static boolean isInRange(int x, int y) {
-        return x >= 1 && x <= N && y >= 1 && y <= M;
+    public static boolean inRange(int x, int y) {
+        return (0 <= x && x < N) && (0 <= y && y < M);
     }
 }
