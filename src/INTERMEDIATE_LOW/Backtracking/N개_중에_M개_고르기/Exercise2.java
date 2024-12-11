@@ -32,24 +32,19 @@ public class Exercise2 {
     }
 
     public static void simulation(int N, int M) {
-        findCombination(0, 0);
+        findCombination(0, 0, 0);
     }
 
-    public static void findCombination(int n, int m) {
-        if (n == N) {
-            if (m == M) {
-                int result = 0;
-                for (int num : pick) {
-                    result ^= num;
-                }
-                answer = Math.max(answer, result);
-            }
+    public static void findCombination(int n, int m, int currVal) {
+        if (m == M) {
+            answer = Math.max(answer, currVal);
             return;
         }
-
-        pick.add(nums[n]);
-        findCombination(n + 1, m + 1);
-        pick.remove(pick.size() - 1);
-        findCombination(n + 1, m);
+        if (n == N) {
+            return;
+        }
+        
+        findCombination(n + 1, m + 1, currVal ^ nums[n]);
+        findCombination(n + 1, m, currVal);
     }
 }
